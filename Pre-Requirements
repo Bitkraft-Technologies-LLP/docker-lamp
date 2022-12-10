@@ -1,0 +1,17 @@
+docker pull php:8.1-apache
+docker pull mysql:latest
+docker pull composer:2
+
+
+docker image build --no-cache -f images/Dockerfile-php-apache -t lamp .
+
+
+docker swarm init
+
+docker stack deploy -c docker-compose.yml lamp_dev
+
+
+
+CREATE USER 'dbadmin'@'%' IDENTIFIED BY 'admin@123';
+GRANT ALL PRIVILEGES ON *.* TO 'dbadmin'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

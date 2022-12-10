@@ -1,0 +1,56 @@
+version: "3.7"
+
+x-defaults:
+  network: &network
+    networks:
+      - net
+
+services:
+  php:
+    image: lamp
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /Users/Apple/NProjects/TDISDI/L7-Hub:/var/www/html
+    configs:
+      - source: php-ini
+        target: /usr/local/etc/php/conf.d/local.ini
+    env_file:
+      - apache_env
+
+  db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_pwd
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbpass
+    volumes:
+      - data:/var/lib/mysql
+      - /Users/Apple/NProjects/TDISDI/db:/var/tmp/db
+    secrets:
+      - db_pwd
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8580:80"
+    links:
+      - db     
+    env_file:
+      - phpmyadmin_env
+
+secrets:
+  db_pwd:
+    file: ./mysql/root_password.txt
+
+configs:
+  php-ini:
+    file: ./php/local.ini
+
+volumes: 
+  workspace:
+     external: true 
+  data:
+     external: true
