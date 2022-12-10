@@ -8,9 +8,12 @@ docker image build --no-cache -f images/Dockerfile-php-apache -t lamp .
 
 docker swarm init
 
-docker stack deploy -c docker-compose.yml lamp_dev
+docker stack deploy -c docker-compose.yml lamp_81
 
 
+//Login into Database Docker terminal
+mysql -u root -p
+Root Password: sup3rs3cr3tp4ssw0rd
 
 CREATE USER 'dbadmin'@'%' IDENTIFIED BY 'admin@123';
 GRANT ALL PRIVILEGES ON *.* TO 'dbadmin'@'%' WITH GRANT OPTION;
